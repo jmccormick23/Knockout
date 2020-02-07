@@ -1,0 +1,68 @@
+//basic die roller
+// game is "Knock out" Objective: avoid throwing certain scores.
+
+#include <iostream>
+#include <string>
+#include <random>
+
+using namespace std;
+
+class dice {
+protected:
+	int side = 0;
+	int die_number = 0;
+public:
+	dice() {};
+	dice(int value, int die_num) {
+		side = value;
+		die_number = die_num;
+	}
+	int face() {
+		return side;
+	}
+
+	void print_side() {
+		string temp;
+		if (die_number == 1)
+			temp = "first";
+		else
+			temp = "second";
+		cout << "The " << temp << " die landed on: " << side << endl;
+	}
+
+
+};
+
+
+int main() {
+
+	random_device device;
+	mt19937 rng(device());
+
+	uniform_int_distribution<mt19937::result_type> dist1(1, 6);
+	uniform_int_distribution<mt19937::result_type> dist2(2, 12);
+
+	int knockout = dist2(rng);
+	int temp = 0;
+	int i = 0;
+	cout << "Don't roll the number: " << knockout << endl << endl;
+
+	do {
+		dice die1(dist1(rng), 1);
+		dice die2(dist1(rng), 2);
+
+		die1.face();
+		die2.face();
+		temp = die1.face() + die2.face();
+
+		die1.print_side();
+		die2.print_side();
+
+		cout << "You rolled a total of: " << temp << endl;
+		i++;
+	} while (temp != knockout);
+
+	cout << "Nice! You went " << i << " times before you got knocked out.";
+
+	return 0;
+}
